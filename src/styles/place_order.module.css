@@ -54,8 +54,8 @@ font-family: 'Roboto', sans-serif;
 }
 
 .order_btn:hover{
-  background-color: rgb(49, 49, 177);
-}
+    background-color: rgb(49, 49, 177);
+  }
 
 .icon{
   margin-right: 5px;
@@ -149,9 +149,79 @@ background-color: rgb(54, 140, 206);
 color: white;
 }
 
-.messages_container{
-  margin-top: 40px;
-  max-height: 100vh;
-  overflow-y: auto;
-  max-width: 95%;
+.form_container{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
+
+.form{
+    border: 1.5px solid grey;
+    -webkit-box-shadow: 0px -3px 5px -4px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px -3px 5px -4px rgba(0,0,0,0.75);
+box-shadow: 0px -3px 5px -4px rgba(0,0,0,0.75);
+    width: 60%;
+    height: fit-content;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    padding: 20px;
+}
+
+.form_heading>h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+.form_heading {
+    margin: 5px 0 20px 0;
+}
+
+.form_element_container > input {
+width: 100%;
+padding: 8px;
+border: none;
+background-color: #F2F3F5;
+border-radius: 8px;
+outline: none;
+}
+
+.form_element_container > select {
+    font-size: medium;
+    border: none;
+    background-color: #F2F3F5;
+    border-radius: 8px;
+    outline: none;
+    padding: 8px;
+}
+
+.form_element_container{
+    margin-bottom: 15px;
+    margin-right: 2px;
+    flex: 1;
+}
+
+.form_to_from{
+display: flex;
+align-items: center;
+justify-content: flex-start;
+}
+
+.btn_container{
+    width: 100%;
+    display: flex;
+}
+
+.form_btn{
+    margin: 0 auto;
+    background-color: rgb(54, 140, 206);
+    border: none;
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form_btn:hover{
+    background-color: rgb(49, 49, 177);
+  }
