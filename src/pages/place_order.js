@@ -73,9 +73,12 @@ export default function place_order() {
                 </div>
                 </div>
                 <div className={styles.form_element_container}>
-                    <label>Quantity</label>
-                    <br />
-                    <input type="text" />
+                    <label>Quantity  &nbsp; </label>
+                    <select name="" id="">
+                        <option value="">1 Tone</option>
+                        <option value="">2 Tones</option>
+                        <option value="">3 Tones</option>
+                    </select>
                 </div>
                 <div className={styles.form_element_container}>
                     <label>Address</label>
