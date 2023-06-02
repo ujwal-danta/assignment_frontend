@@ -11,12 +11,14 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Order() {
   const router = useRouter();
 
+
+
   return (
     <>
       <Head></Head>
       <div className={styles.container}>
         <div className={styles.sidebar}>
-          <div className={styles.order_btn}>
+          <div className={styles.order_btn} onClick={router.push('/place_order')}>
             <AiOutlinePlus className={styles.icon} />
             <p>New Order</p>
           </div>

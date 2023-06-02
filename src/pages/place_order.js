@@ -5,12 +5,21 @@ import styles from "@/styles/place_order.module.css";
 import { AiOutlineInbox, AiOutlinePlus } from "react-icons/ai";
 import { FcAcceptDatabase } from "react-icons/fc";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function place_order() {
   const router = useRouter();
 
+  const [order,setOrder] = useState({
+    to: "",
+    from: "",
+    quantity: 1,
+    Address: "",
+    transporter : "transporter 1"
+  })
+ console.log(order)
   return (
     <>
       <Head></Head>
@@ -64,31 +73,46 @@ export default function place_order() {
                 <div className={styles.form_element_container}>
                     <label>To</label>
                     <br />
-                    <input type="text" />
+                    <input type="text" 
+                    value={order.to}
+                    onChange={(e)=>setOrder({
+                      ...order,
+                      to : e.target.value
+                    })}
+                    />
                 </div>
                 <div className={styles.form_element_container}>
                     <label>From</label>
                     <br />
-                    <input type="text" />
+                    <input type="text"
+                    value={order.from}
+                    onChange={(e)=>setOrder({
+                      ...order,
+                      from: e.target.value
+                    })}
+                    />
                 </div>
                 </div>
                 <div className={styles.form_element_container}>
                     <label>Quantity  &nbsp; </label>
-                    <select name="" id="">
-                        <option value="">1 Tone</option>
-                        <option value="">2 Tones</option>
-                        <option value="">3 Tones</option>
+                    <select name="" id="" onChange={(e)=>setOrder({
+                      ...order,
+                      quantity: e.target.value
+                    }) }>
+                        <option value={1}>1 Tone</option>
+                        <option value={2}>2 Tones</option>
+                        <option value={3}>3 Tones</option>
                     </select>
                 </div>
                 <div className={styles.form_element_container}>
                     <label>Address</label>
                     <br />
-                    <input type="text" />
+                    <input type="text" value={"Sakhipara"}/>
                 </div>
                 <div className={styles.form_element_container}>
                     <label>Transporter &nbsp; </label>
                     <select name="" id="">
-                        <option value="">Transporter 1</option>
+                        <option value="transporter 1">Transporter 1</option>
                     </select>
                 </div>
                 <div className={styles.btn_container}>
