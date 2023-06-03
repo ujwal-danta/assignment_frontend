@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from '../styles/login.module.css'
 import { useRouter } from 'next/router'
+import { userDataContext } from '@/context/context'
 const login = () => {
+  const {userData,setUserData} = useContext(userDataContext)
   const router = useRouter()
   const [user,setUser] = useState({
     email : "",
@@ -38,6 +40,7 @@ function ValidateEmail(mail)
         alert(data.message)
       }
       else{
+        localStorage.setItem("user",data.data.email)
         router.push('/')
       }
       })

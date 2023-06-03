@@ -5,13 +5,43 @@ import styles from "@/styles/Home.module.css";
 import {AiOutlineInbox,AiOutlinePlus} from 'react-icons/ai'
 import {FcAcceptDatabase} from 'react-icons/fc'
 import Message from "@/components/Message";
+import { userDataContext } from "@/context/context";
 import { useRouter } from "next/router";
+import { useContext, useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
+
 export default function Home() {
   const router = useRouter()
+  const {userData,setUserData} = useContext(userDataContext)
+  useEffect(() => {
+    if(!localStorage.getItem("user"))
+    router.push('/register')
+    else
+    {
+      fetch("http://localhost:3001/api/getUser", {
+        method: "POST",
+        body: JSON.stringify({
+          email : localStorage.getItem("user")
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+      .then(res=>res.json())
+      .then(data=>{
+       setUserData(data.data)
+      })
+      .catch(err=>console.log(err))
+    }
+  }, [])
 
+  const handleLogout = ()=>{
+    localStorage.removeItem("user")
+    router.push('/login')
+  }
+  
   return (
     <>
     <Head>
@@ -49,14 +79,17 @@ export default function Home() {
             
             </div>
             <div className={styles.logout_container}>
-            <div className={styles.logout_btn}>Logout</div>
+            <div className={styles.logout_btn} onClick={handleLogout}>Logout</div>
             </div>
           </div>
           <div className={styles.messages_container}>
-            <Message/>
-            <Message/>
-            <Message/>
-            <Message/>
+            {
+              userData  && userData.messages.map(data=>{
+                return (
+                  <Message data={data}/>
+                )
+              })
+            }
           </div>
         </div>
       </div>

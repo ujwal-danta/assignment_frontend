@@ -5,21 +5,80 @@ import styles from "@/styles/place_order.module.css";
 import { AiOutlineInbox, AiOutlinePlus } from "react-icons/ai";
 import { FcAcceptDatabase } from "react-icons/fc";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { userDataContext } from "@/context/context";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function place_order() {
   const router = useRouter();
-
+  const {userData,setUserData} = useContext(userDataContext)
   const [order,setOrder] = useState({
     to: "",
     from: "",
     quantity: 1,
-    Address: "",
+    address: "",
     transporter : "transporter 1"
   })
- console.log(order)
+
+  
+
+
+  useEffect(() => {
+    if(!localStorage.getItem("user"))
+    router.push('/register')
+    else
+    {
+      fetch("http://localhost:3001/api/getUser", {
+        method: "POST",
+        body: JSON.stringify({
+          email : localStorage.getItem("user")
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+      .then(res=>res.json())
+      .then(data=>{
+       setUserData(data.data)
+       setOrder({
+        ...order,
+        address: data.data.address
+       })
+      })
+      .catch(err=>console.log(err))
+    }
+
+  }, [])
+
+
+
+  const handleLogout = ()=>{
+    localStorage.removeItem("user")
+    router.push('/login')
+  }
+
+  const handleSubmit = ()=> {
+    fetch("http://localhost:3001/api/placeOrder",{
+      method: "PATCH",
+      body: JSON.stringify({
+        order,
+        email: localStorage.getItem("user")
+      }),
+      headers : {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(res=>res.json())
+    .then((data)=>{
+      alert("Order has been sent to the transporter")
+      router.push('/')
+    })
+    .catch(err=>console.log(err))
+  }
+
+
+ 
   return (
     <>
       <Head></Head>
@@ -60,11 +119,11 @@ export default function place_order() {
             </div>
             </div>
             <div className={styles.logout_container}>
-              <div className={styles.logout_btn}>Logout</div>
+              <div className={styles.logout_btn} onClick={handleLogout}>Logout</div>
             </div>
           </div>
           <div className={styles.form_container}>
-            <form className={styles.form}>
+            <div className={styles.form}>
                 <div className={styles.form_heading}>
                     <h3>Details</h3>
                     <hr />
@@ -95,7 +154,7 @@ export default function place_order() {
                 </div>
                 <div className={styles.form_element_container}>
                     <label>Quantity  &nbsp; </label>
-                    <select name="" id="" onChange={(e)=>setOrder({
+                    <select name="" id="" value={order.quantity} onChange={(e)=>setOrder({
                       ...order,
                       quantity: e.target.value
                     }) }>
@@ -107,7 +166,12 @@ export default function place_order() {
                 <div className={styles.form_element_container}>
                     <label>Address</label>
                     <br />
-                    <input type="text" value={"Sakhipara"}/>
+                    <input type="text" value={order.address}
+                    onChange={(e)=>setOrder({
+                      ...order,
+                      address : e.target.value
+                    })}
+                    />
                 </div>
                 <div className={styles.form_element_container}>
                     <label>Transporter &nbsp; </label>
@@ -115,11 +179,11 @@ export default function place_order() {
                         <option value="transporter 1">Transporter 1</option>
                     </select>
                 </div>
-                <div className={styles.btn_container}>
+                <div className={styles.btn_container} onClick={handleSubmit}>
                 <button className={styles.form_btn}>Place Order</button>
                 </div>
 
-            </form>
+            </div>
           </div>
 
 

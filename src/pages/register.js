@@ -19,9 +19,9 @@ const register = () => {
   }
 
   const handleRegister = () => {
-    const { name, email, password, re_enterPassword, type } = user;
+    const { name, email, password, re_enterPassword, type, address } = user;
     const validEmail = ValidateEmail(email);
-    if (validEmail && name && password && password === re_enterPassword) {
+    if (validEmail && name && address && password && password === re_enterPassword) {
       fetch("http://localhost:3001/register", {
         method: "POST",
         body: JSON.stringify({
@@ -29,6 +29,7 @@ const register = () => {
           name,
           email,
           password,
+          address
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -92,7 +93,7 @@ const register = () => {
             }
           />
           <input
-            type="password"
+            type="text"
             placeholder="Your Address"
             value={user.address}
             onChange={(e) =>

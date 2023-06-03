@@ -4,14 +4,15 @@ import {MdOutlinePending} from 'react-icons/md'
 import { useRouter } from 'next/router';
 
 
-const Message = () => {
+const Message = ({data}) => {
 
   const router = useRouter();
+  const {orderID,createdAt} = data
   return (
-    <div className={styles.container} onClick={()=>router.push('/orders/1234')}>
+    <div className={styles.container} onClick={()=>router.push(`/orders/${orderID}`)}>
         <div className={styles.orderid_container}>
-            <p className={styles.date}>12/5/21 &nbsp; &nbsp; &nbsp;</p>
-            <p className={styles.order}><span className={styles.text}>Order Id : </span><span className={styles.order_id}>&nbsp; #gh56123</span></p>
+            <p className={styles.date}>{createdAt} &nbsp; &nbsp; &nbsp;</p>
+            <p className={styles.order}><span className={styles.text}>Order Id : </span><span className={styles.order_id}>&nbsp; {orderID}</span></p>
         </div>
         <div className={styles.pending}>
             <MdOutlinePending/> <p>&nbsp; Pending.....</p>

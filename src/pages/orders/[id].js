@@ -5,20 +5,62 @@ import styles from "@/styles/order.module.css";
 import { AiOutlineInbox, AiOutlinePlus } from "react-icons/ai";
 import { FcAcceptDatabase } from "react-icons/fc";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Order() {
   const router = useRouter();
+  const {id} = router.query
+  const [orderDetails,setOrderDetails] = useState({})
+  const [price,setPrice] = useState(null)
+ useEffect(() => {
+  if(id)
+  fetch(`http://localhost:3001/api/orders/${id}`)
+  .then(res=>res.json())
+  .then(data=>{
+   console.log(data)
+   setOrderDetails(data)
+  })
+  .catch(err=>console.log(err))
+ }, [id])
+ 
 
+
+  const handleLogout = ()=>{
+    localStorage.removeItem("user")
+    router.push('/login')
+  }
+  
+  const handleSubmitTransporter = ()=>{
+    if(parseInt(price)<0 || price==null)
+    alert('Enter a valid price')
+    else{
+      fetch("http://localhost:3001/api/sendPrice",{
+        method: "PATCH",
+        body: JSON.stringify({
+          orderDetails,
+          cost : parseInt(price) 
+        }),
+        headers : {
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(res=>res.json())
+      .then((data)=>{
+        console.log(data)
+      })
+      .catch(err=>console.log(err))
+    }
+  }
 
 
   return (
     <>
       <Head></Head>
+      
       <div className={styles.container}>
         <div className={styles.sidebar}>
-          <div className={styles.order_btn} onClick={router.push('/place_order')}>
+          <div className={styles.order_btn} onClick={()=>router.push('/place_order')}>
             <AiOutlinePlus className={styles.icon} />
             <p>New Order</p>
           </div>
@@ -52,7 +94,7 @@ export default function Order() {
               <button className={styles.go}>Go!</button>
             </div>
             </div>
-            <div className={styles.logout_container}>
+            <div className={styles.logout_container} onClick={handleLogout}>
               <div className={styles.logout_btn}>Logout</div>
             </div>
           </div>
@@ -65,45 +107,75 @@ export default function Order() {
               <div className={styles.order_details}>
                 <div className={styles.field_container}>
                     <h3 className={styles.data}>To :</h3>
-                    <div className={styles.value}>Ujwal kumar Danta</div>
+                    <div className={styles.value}>{orderDetails.to}</div>
                 </div>
                 <div className={styles.field_container}>
                     <h3 className={styles.data}>From :</h3>
-                    <div className={styles.value}>Ujwal kumar Danta</div>
+                    <div className={styles.value}>{orderDetails.from}</div>
                 </div>
                 <div className={styles.field_container}>
                     <h3 className={styles.data}>Quantity :</h3>
-                    <div className={styles.value}>Ujwal kumar Danta</div>
+                    <div className={styles.value}>{orderDetails.quantity}</div>
                 </div>
                 <div className={styles.field_container}>
                     <h3 className={styles.data}>Address :</h3>
-                    <div className={styles.value}>Ujwal kumar Danta</div>
+                    <div className={styles.value}>{orderDetails.address}</div>
                 </div>
                 <div className={styles.field_container}>
                     <h3 className={styles.data}>Transporter:</h3>
                     <div className={styles.value}>
-                        Ujwal kumar Danta Ujwal kumar Danta Ujwal mar Dantaaaaaaaaaaaaaa
-                        Ujwal kumar Danta Ujwal kumar Danta Ujwal mar Dantaaaaaaaaaaaaaa
-                        </div>
+                      {orderDetails.transporter} 
+                      </div>
                 </div>
               </div>
             </div>
             <div className={styles.cost_container}>
             <div className={styles.field_container}>
                     <h2 className={styles.data}>OrderID :</h2>
-                    <div className={styles.value}>Ujwal kumar Danta</div>
+                    <div className={styles.value}>{id}</div>
                 </div>
                 <div className={styles.field_container}>
                     <h2 className={styles.data}>Cost ( in dollars ) :</h2>
-                    <div className={styles.value}>1234</div>
+                    <div className={styles.value}>
+                    {
+                      localStorage.getItem("user") === "transporter1@gmail.com" ? 
+                      <input type="text" placeholder="Your Price" 
+                      className={styles.price}
+                      value={price}
+                      onChange={(e)=>setPrice(e.target.value)}
+                      /> 
+                      : 
+                      <p>1234</p>
+                    }
+                    </div>
                 </div>
 
                 <div className={styles.button_container}>
-                    <button className={styles.btn_green}>Accept</button>
-                    <button className={styles.btn_red}>Reject</button>
+                    {
+                      localStorage.getItem("user") === "transporter1@gmail.com" ? 
+                      <>
+                       <button 
+                       className={styles.btn_green}
+                       onClick={handleSubmitTransporter}
+                       >
+                        SEND
+                        </button>
+                      </> 
+                      :
+                      <>
+                      <button className={styles.btn_green}>Accept</button>
+                      <button className={styles.btn_red}>Reject</button>
+                      </>
+                    }
                 </div>
                 <div>
-                   <strong>Note :</strong> <em>On Clicking </em> Accept or Reject , <em> a message will be sent to the transporter confirming or rejecting the delivery charges</em> 
+                  {
+                     localStorage.getItem("user") === "transporter1@gmail.com" ? 
+                     <> <strong>Note :</strong> <em>On Clicking </em> SEND , <em> a message will be sent to the respective manufacturer quoting the delivery charges</em> </> 
+                     : 
+                     <> <strong>Note :</strong> <em>On Clicking </em> Accept or Reject , <em> a message will be sent to the transporter confirming or rejecting the delivery charges</em> </>
+                  }
+                  
                 </div>
             </div>
           </div>
