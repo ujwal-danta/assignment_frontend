@@ -95,7 +95,7 @@ export default function Order() {
   return (
     <>
       <Head></Head>
-      {console.log(status)}
+      
       <div className={styles.container}>
         <div className={styles.sidebar}>
         {

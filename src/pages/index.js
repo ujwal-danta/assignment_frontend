@@ -48,7 +48,7 @@ export default function Home() {
   if(orderIDSearch==="")
   alert("Please enter a valid orderID")
   else{
-    fetch("http://localhost:3001/api/getMessage", {
+    fetch("http://localhost:3001/api/getMessagebyOrderID", {
       method: "POST",
       body: JSON.stringify({
         search : orderIDSearch
@@ -59,8 +59,10 @@ export default function Home() {
     })
     .then(res=>res.json())
     .then(data=>{
-      console.log(data)
-    //  setUserData(data.data)
+      if(!data)
+      alert("Invalid ID")
+      else
+      router.push(`/orders/${data.orderID}`)
     })
     .catch(err=>console.log(err))
   }
