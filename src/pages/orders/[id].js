@@ -47,7 +47,8 @@ export default function Order() {
       })
       .then(res=>res.json())
       .then((data)=>{
-        console.log(data)
+        alert('Price sent to the manufacturer')
+        router.push('/')
       })
       .catch(err=>console.log(err))
     }
@@ -60,10 +61,15 @@ export default function Order() {
       
       <div className={styles.container}>
         <div className={styles.sidebar}>
-          <div className={styles.order_btn} onClick={()=>router.push('/place_order')}>
-            <AiOutlinePlus className={styles.icon} />
-            <p>New Order</p>
-          </div>
+        {
+            localStorage.getItem("user") === "transporter1@gmail.com" ? 
+            <></> 
+            : 
+            <div className={styles.order_btn} onClick={()=>router.push('/place_order')}>
+            <AiOutlinePlus className={styles.icon}/>
+              <p>New Order</p>
+            </div>
+          }
 
           <div className={styles.nav_container}>
             <ul className={styles.nav}>
@@ -145,7 +151,7 @@ export default function Order() {
                       onChange={(e)=>setPrice(e.target.value)}
                       /> 
                       : 
-                      <p>1234</p>
+                      <p>{orderDetails.price}</p>
                     }
                     </div>
                 </div>

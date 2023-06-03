@@ -31,6 +31,7 @@ export default function Home() {
       })
       .then(res=>res.json())
       .then(data=>{
+        console.log(data)
        setUserData(data.data)
       })
       .catch(err=>console.log(err))
@@ -49,11 +50,15 @@ export default function Home() {
     </Head>
       <div className={styles.container}>
         <div className={styles.sidebar}>
-          <div className={styles.order_btn} onClick={()=>router.push('/place_order')}>
-          <AiOutlinePlus className={styles.icon}/>
-            <p>New Order</p>
+          {
+            localStorage.getItem("user") === "transporter1@gmail.com" ? 
+            <></> 
+            : 
+            <div className={styles.order_btn} onClick={()=>router.push('/place_order')}>
+            <AiOutlinePlus className={styles.icon}/>
+              <p>New Order</p>
             </div>
-          
+          }
           <div className={styles.nav_container}>
             <ul className={styles.nav}>
               <li className={styles.nav_items}  onClick={()=>router.push(`/`)} > <AiOutlineInbox/> &nbsp;  Inbox</li>
