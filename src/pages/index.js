@@ -7,7 +7,7 @@ import {FcAcceptDatabase} from 'react-icons/fc'
 import Message from "@/components/Message";
 import { userDataContext } from "@/context/context";
 import { useRouter } from "next/router";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,8 +15,9 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const router = useRouter()
   const {userData,setUserData} = useContext(userDataContext)
+  const [orderIDSearch,setOrderIDSearch] = useState("")
   useEffect(() => {
-    if(!localStorage.getItem("user"))
+    if(localStorage.length === 0||!localStorage.getItem("user"))
     router.push('/register')
     else
     {
@@ -43,6 +44,28 @@ export default function Home() {
     router.push('/login')
   }
   
+  const handleSearchOrderID = ()=>{
+  if(orderIDSearch==="")
+  alert("Please enter a valid orderID")
+  else{
+    fetch("http://localhost:3001/api/getMessage", {
+      method: "POST",
+      body: JSON.stringify({
+        search : orderIDSearch
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      console.log(data)
+    //  setUserData(data.data)
+    })
+    .catch(err=>console.log(err))
+  }
+  }
+
   return (
     <>
     <Head>
@@ -70,8 +93,14 @@ export default function Home() {
           <div className={styles.top_bar}>
             <div className={styles.search_container}>
               <div>
-            <input type="text" placeholder=" &#128269; Enter OrderID" className={styles.search} />
-            <button className={styles.go}>Go!</button>
+            <input type="text" placeholder=" &#128269; Enter OrderID" 
+            className={styles.search} 
+            value={orderIDSearch}
+            onChange={(e)=>setOrderIDSearch(e.target.value)}
+            />
+            <button className={styles.go}
+            onClick={handleSearchOrderID}
+            >Go!</button>
               </div>
             <div className={styles.vertical}></div>
             <div className={styles.to_from_container}>

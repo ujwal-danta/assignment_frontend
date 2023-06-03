@@ -13,12 +13,13 @@ export default function Order() {
   const {id} = router.query
   const [orderDetails,setOrderDetails] = useState({})
   const [price,setPrice] = useState(null)
+  const [status,setStatus] = useState("")
  useEffect(() => {
   if(id)
   fetch(`http://localhost:3001/api/orders/${id}`)
   .then(res=>res.json())
   .then(data=>{
-   console.log(data)
+  //  console.log(data)
    setOrderDetails(data)
   })
   .catch(err=>console.log(err))
@@ -54,11 +55,47 @@ export default function Order() {
     }
   }
 
+  const handleSubmitManufacAccept = ()=>{
+    fetch("http://localhost:3001/api/updateStatus",{
+        method: "PATCH",
+        body: JSON.stringify({
+          orderDetails,
+          status :  "Accepted"
+        }),
+        headers : {
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(res=>res.json())
+      .then((data)=>{
+       router.push('/')
+      })
+      .catch(err=>console.log(err))
+    }
+    const handleSubmitManufacReject = ()=>{
+      fetch("http://localhost:3001/api/updateStatus",{
+          method: "PATCH",
+          body: JSON.stringify({
+            orderDetails,
+            status :  "Rejected"
+          }),
+          headers : {
+            'Content-Type': 'application/json'
+          },
+        })
+        .then(res=>res.json())
+        .then((data)=>{
+         router.push('/')
+        })
+        .catch(err=>console.log(err))
+      }
+  
+
 
   return (
     <>
       <Head></Head>
-      
+      {console.log(status)}
       <div className={styles.container}>
         <div className={styles.sidebar}>
         {
@@ -169,8 +206,8 @@ export default function Order() {
                       </> 
                       :
                       <>
-                      <button className={styles.btn_green}>Accept</button>
-                      <button className={styles.btn_red}>Reject</button>
+                      <button className={styles.btn_green} onClick={handleSubmitManufacAccept} value={"accept"}>Accept</button>
+                      <button className={styles.btn_red} value={"reject"} onClick={handleSubmitManufacReject}>Reject</button>
                       </>
                     }
                 </div>

@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 const Message = ({data}) => {
 
   const router = useRouter();
-  const {orderID,createdAt} = data
+  const {orderID,createdAt, status} = data
   return (
     <div className={styles.container} onClick={()=>router.push(`/orders/${orderID}`)}>
         <div className={styles.orderid_container}>
@@ -15,7 +15,7 @@ const Message = ({data}) => {
             <p className={styles.order}><span className={styles.text}>Order Id : </span><span className={styles.order_id}>&nbsp; {orderID}</span></p>
         </div>
         <div className={styles.pending}>
-            <MdOutlinePending/> <p>&nbsp; Pending.....</p>
+            <MdOutlinePending/> <p>&nbsp; {status}</p>
         </div>
     </div>
   )
